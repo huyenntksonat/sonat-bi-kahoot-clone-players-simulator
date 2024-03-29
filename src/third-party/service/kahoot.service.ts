@@ -38,14 +38,15 @@ export class KahootService extends BaseThirdPartyService {
   async answer(pin: string, dto: PushQuestionDto) {
     // console.log(`Begin answer all`);
 
-    const dtoList: SubmitAnswerDto[] = DISPLAY_NAMES.map(
-      (item) =>
-        new SubmitAnswerDto({
-          displayName: item,
-          questionId: dto.question,
-          optionId: dto.options[Math.floor(Math.random() * 4)]._id,
-        }),
-    );
+    const dtoList: SubmitAnswerDto[] = DISPLAY_NAMES.map((item) => {
+      const randomOption = dto.options[Math.floor(Math.random() * 4)];
+      var optionId = randomOption["id"];
+      return new SubmitAnswerDto({
+        displayName: item,
+        questionId: dto.question,
+        optionId: optionId,
+      });
+    });
     const requests = dtoList.map((item) => {
       this.answerOne(pin, item);
     });
@@ -55,15 +56,19 @@ export class KahootService extends BaseThirdPartyService {
 
   async answerOne(pin: string, dto: SubmitAnswerDto): Promise<boolean> {
     try {
-      TimeHelper.delay(Math.floor(Math.random() + 2) * 1000);
+      await TimeHelper.delay(Math.floor(Math.random() + 2) * 1000);
+      // console.log(`Start sending post to answer...`);
+
       var response = await this.sendPost(
         `${KAHOOT_F8_BASE_URL}/games/${pin}/answer`,
         dto,
       );
-      //   console.log(`Answering one question: `, response);
+      // console.log(`Answering one question: `, response);
 
       return response.statusCode == 201;
     } catch (e) {
+      // console.log(`Error sending answer: `, e);
+
       return false;
     }
   }

@@ -14,10 +14,10 @@ export class PlayersService {
     return this.kahootService.joinGame(pin);
   }
 
-  pushQuestion(pin: string, dto: PushQuestionDto): any {
-    this.delay(5000);
+  async pushQuestion(pin: string, dto: PushQuestionDto) {
+    await this.delay(5000);
     // send answers to kahoot
-    this.kahootService.answer(pin, dto);
+    await this.kahootService.answer(pin, dto);
 
     // call host app to process 
     return `All players have answered question`;
