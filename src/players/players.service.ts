@@ -16,7 +16,10 @@ export class PlayersService {
 
   pushQuestion(pin: string, dto: PushQuestionDto): any {
     this.delay(5000);
+    // send answers to kahoot
     this.kahootService.answer(pin, dto);
+
+    // call host app to process 
     return `All players have answered question`;
   }
 }
