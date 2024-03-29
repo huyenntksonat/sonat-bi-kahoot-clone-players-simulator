@@ -1,4 +1,4 @@
-export const DISPLAY_NAMES = [
+export const NAMES = [
   'name1',
   'name2',
   'name3',
@@ -100,3 +100,5 @@ export const DISPLAY_NAMES = [
   'name99',
   'name100',
 ];
+
+export const DISPLAY_NAMES = NAMES.slice(0, 10);

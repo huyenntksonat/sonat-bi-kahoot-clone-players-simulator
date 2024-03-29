@@ -35,12 +35,10 @@ export class KahootService extends BaseThirdPartyService {
     }
   }
 
-  async answer(pin: string, dto: PushQuestionDto) {
-    // console.log(`Begin answer all`);
-
+  async answer(pin: string, dto: PushQuestionDto) {    
     const dtoList: SubmitAnswerDto[] = DISPLAY_NAMES.map((item) => {
       const randomOption = dto.options[Math.floor(Math.random() * 4)];
-      var optionId = randomOption["id"];
+      var optionId = randomOption['id'];
       return new SubmitAnswerDto({
         displayName: item,
         questionId: dto.question,
