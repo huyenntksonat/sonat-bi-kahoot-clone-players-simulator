@@ -11,6 +11,8 @@ export class PlayersService {
   }
 
   joinGame(pin: string) {
+    console.log(`Pin: ${pin}`);
+    
     return this.kahootService.joinGame(pin);
   }
 

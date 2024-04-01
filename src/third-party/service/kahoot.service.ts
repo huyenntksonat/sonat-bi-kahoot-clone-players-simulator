@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BaseThirdPartyService } from './base-thirdparty.service';
 import { JoinGameDto } from '../dto/join-game.dto';
 import { DISPLAY_NAMES } from 'src/constants/config.constant';
-import { KAHOOT_F8_BASE_URL, UrlConstants } from '../constant/url.constant';
+import { UrlConstants } from '../constant/url.constant';
 import { PushQuestionDto } from 'src/players/dto/push-question.dto';
 import { SubmitAnswerDto } from '../dto/submit-answer.dto';
 import { TimeHelper } from 'src/helper/time.helper';
@@ -36,6 +36,7 @@ export class KahootService extends BaseThirdPartyService {
   }
 
   async answer(pin: string, dto: PushQuestionDto) {    
+    console.log(`Current question ${dto.question}`);
     const dtoList: SubmitAnswerDto[] = DISPLAY_NAMES.map((item) => {
       const randomOption = dto.options[Math.floor(Math.random() * 4)];
       var optionId = randomOption['id'];
@@ -58,7 +59,7 @@ export class KahootService extends BaseThirdPartyService {
       // console.log(`Start sending post to answer...`);
 
       var response = await this.sendPost(
-        `${KAHOOT_F8_BASE_URL}/games/${pin}/answer`,
+        `${UrlConstants.KAHOOT_F8_BASE_URL}/games/${pin}/answer`,
         dto,
       );
       // console.log(`Answering one question: `, response);
