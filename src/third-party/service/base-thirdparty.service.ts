@@ -28,4 +28,24 @@ export class BaseThirdPartyService {
     );
     return data;
   }
+
+  async sendGet(
+    url: string,
+    headers?: Record<string, string>,
+  ): Promise<any> {
+    var start = Date.now();
+    const { data } = await firstValueFrom(
+      this.httpService.get(url, { headers: headers }).pipe(
+        catchError((er: AxiosError) => {
+          console.log(`An error happened: `, er);
+          throw er;
+        }),
+      ),
+    );
+    var end = Date.now();
+    console.log(
+      `Url = ${url}\tStart = ${start}\tEnd = ${end}\tDuration = ${Math.abs(end - start)}`,
+    );
+    return data;
+  }
 }

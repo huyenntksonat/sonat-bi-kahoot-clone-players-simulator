@@ -62,6 +62,9 @@ export class KahootService extends BaseThirdPartyService {
         `${UrlConstants.KAHOOT_F8_BASE_URL}/games/${pin}/answer`,
         dto,
       );
+      // var response = await this.sendGet(
+      //   `${UrlConstants.KAHOOT_F8_BASE_URL}/games/${pin}`,
+      // );
       // console.log(`Answering one question: `, response);
 
       return response.statusCode == 201;
