@@ -1,6 +1,6 @@
 export class UrlConstants {
-  static KAHOOT_F8_BASE_URL = 'https://kahoot-f8-apis.sonatgame.com';
-  // static KAHOOT_F8_BASE_URL = 'http://localhost:5050';
+  // static KAHOOT_F8_BASE_URL = 'https://kahoot-f8-apis.sonatgame.com';
+  static KAHOOT_F8_BASE_URL = 'http://localhost:5000';
   static HOST_SIMULATOR_BASE_URL = 'http://localhost:8001';
   static JOIN_GAME = 'games/:pin/join';
 

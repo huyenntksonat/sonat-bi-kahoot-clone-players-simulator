@@ -5,6 +5,8 @@ export class SubmitAnswerDto {
 
   optionId: string;
 
+  submitAnswerTime: Date
+
   constructor(data?: Partial<SubmitAnswerDto>) {
     if (data) {
       Object.assign(this, data);

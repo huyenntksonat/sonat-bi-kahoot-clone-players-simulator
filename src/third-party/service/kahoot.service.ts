@@ -61,6 +61,7 @@ export class KahootService extends BaseThirdPartyService {
         displayName: item,
         questionId: dto.question,
         optionId: optionId,
+        submitAnswerTime: new Date()
       });
     });
     const requests = dtoList.map((item) => {
