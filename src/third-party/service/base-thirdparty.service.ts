@@ -1,8 +1,9 @@
 import { HttpService } from '@nestjs/axios';
-import { catchError, firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, last, lastValueFrom } from 'rxjs';
 import { AxiosError } from 'axios';
 import { Injectable } from '@nestjs/common';
 import { time } from 'console';
+import { SubmitAnswerDto } from '../dto/submit-answer.dto';
 
 @Injectable()
 export class BaseThirdPartyService {
@@ -14,7 +15,8 @@ export class BaseThirdPartyService {
     headers?: Record<string, string>,
   ): Promise<any> {
     var start = Date.now();
-    const { data } = await firstValueFrom(
+
+    const { data } = await lastValueFrom(
       this.httpService.post(url, requestBody, { headers: headers }).pipe(
         catchError((er: AxiosError) => {
           console.log(`An error happened: `, er);
@@ -24,15 +26,12 @@ export class BaseThirdPartyService {
     );
     var end = Date.now();
     console.log(
-      `Url = ${url}\tStart = ${start}\tEnd = ${end}\tDuration = ${Math.abs(end - start)}`,
+      `Url = ${url}\tStart = ${start}\tEnd = ${end}\tDuration = ${Math.abs(end - start)} by ${(requestBody as SubmitAnswerDto).displayName}`,
     );
     return data;
   }
 
-  async sendGet(
-    url: string,
-    headers?: Record<string, string>,
-  ): Promise<any> {
+  async sendGet(url: string, headers?: Record<string, string>): Promise<any> {
     var start = Date.now();
     const { data } = await firstValueFrom(
       this.httpService.get(url, { headers: headers }).pipe(

@@ -9,7 +9,7 @@ import { TimeHelper } from 'src/helper/time.helper';
 
 @Injectable()
 export class KahootService extends BaseThirdPartyService {
-  joinGame(pin: string) {
+  async joinGame(pin: string) {
     const dtoList: JoinGameDto[] = DISPLAY_NAMES.map(
       (item) =>
         new JoinGameDto({
@@ -17,15 +17,16 @@ export class KahootService extends BaseThirdPartyService {
         }),
     );
     const requests = dtoList.map((item) => {
+      this.checkPin(pin);
       this.joinGameOne(pin, item);
     });
-    const responses = Promise.all(requests);
+    const responses = await Promise.all(requests);
     return `Join game successfully`;
   }
 
   async joinGameOne(pin: string, dto: JoinGameDto): Promise<boolean> {
     try {
-      var response = await this.sendPost(
+      const response = await this.sendPost(
         `${UrlConstants.KAHOOT_F8_BASE_URL}/games/${pin}/join`,
         dto,
       );
@@ -35,11 +36,27 @@ export class KahootService extends BaseThirdPartyService {
     }
   }
 
-  async answer(pin: string, dto: PushQuestionDto) {    
+  async checkPin(pin: string): Promise<boolean> {
+    try {
+      const response = await this.sendGet(
+        `${UrlConstants.KAHOOT_F8_BASE_URL}/games/${pin}/check`,
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async answer(pin: string, dto: PushQuestionDto) {
     console.log(`Current question ${dto.question}`);
     const dtoList: SubmitAnswerDto[] = DISPLAY_NAMES.map((item) => {
-      const randomOption = dto.options[Math.floor(Math.random() * 4)];
-      var optionId = randomOption['id'];
+      const rand = Math.random();
+      const correctOption = dto.options.filter((item) => item.TorF);
+      const randomOption =
+        rand > 0.5
+          ? dto.options[Math.floor(Math.random() * 4)]
+          : correctOption[0];
+      const optionId = randomOption['id'];
       return new SubmitAnswerDto({
         displayName: item,
         questionId: dto.question,
@@ -58,7 +75,7 @@ export class KahootService extends BaseThirdPartyService {
       await TimeHelper.delay(Math.floor(Math.random() + 2) * 1000);
       // console.log(`Start sending post to answer...`);
 
-      var response = await this.sendPost(
+      const response = await this.sendPost(
         `${UrlConstants.KAHOOT_F8_BASE_URL}/games/${pin}/answer`,
         dto,
       );
