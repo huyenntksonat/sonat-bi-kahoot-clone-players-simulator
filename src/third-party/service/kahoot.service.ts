@@ -16,6 +16,7 @@ export class KahootService extends BaseThirdPartyService {
           displayName: item,
         }),
     );
+    console.log("Join game");
     const requests = dtoList.map((item) => {
       this.checkPin(pin);
       this.joinGameOne(pin, item);
@@ -28,7 +29,7 @@ export class KahootService extends BaseThirdPartyService {
     try {
       const response = await this.sendPost(
         `${UrlConstants.KAHOOT_F8_BASE_URL}/games/${pin}/join`,
-        dto,
+        dto
       );
       return response.statusCode == 201;
     } catch (e) {

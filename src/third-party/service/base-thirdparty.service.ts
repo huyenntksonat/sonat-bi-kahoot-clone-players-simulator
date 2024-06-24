@@ -25,9 +25,23 @@ export class BaseThirdPartyService {
       ),
     );
     var end = Date.now();
-    console.log(
-      `Url = ${url}\tStart = ${start}\tEnd = ${end}\tDuration = ${Math.abs(end - start)} by ${(requestBody as SubmitAnswerDto).displayName}`,
-    );
+    if((requestBody as SubmitAnswerDto).submitAnswerTime != null) {
+      const tmp = JSON.parse(JSON.stringify(data.data));
+      const time = Number(tmp.time)*1000;
+      const pointQues = Number(tmp.pointQues);
+      const startQuestionTime = Number(tmp.startQuestionTime);
+      const submitQuestionTime = (requestBody as SubmitAnswerDto).submitAnswerTime.getTime();
+      let pointCalculate = pointQues * (1-(submitQuestionTime-startQuestionTime)/time);
+      if(!tmp.TorF) pointCalculate = 0;
+      console.log(
+        `${start}, ${end}, ${Math.abs(end - start)}, ${(requestBody as SubmitAnswerDto).displayName}, ${tmp.point}, ${pointCalculate}`,
+      );
+    }
+    else {
+      console.log(
+        `${start}, ${end}, ${Math.abs(end - start)}, ${(requestBody as SubmitAnswerDto).displayName}`,
+      );
+    }
     return data;
   }
 
@@ -43,7 +57,7 @@ export class BaseThirdPartyService {
     );
     var end = Date.now();
     console.log(
-      `Url = ${url}\tStart = ${start}\tEnd = ${end}\tDuration = ${Math.abs(end - start)}`,
+      `${start}, ${end}, ${Math.abs(end - start)}`,
     );
     return data;
   }
